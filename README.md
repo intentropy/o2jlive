@@ -4,12 +4,12 @@ A python based link between the JACK Audio Connection Kit, and Open Sound Contro
 
 Basic Mode:
 
-Running o2jlive.py without passing a file as an argument will start basic mode.  Basic mode only allows for the direct control of the jack transport.
+Running o2jlive without passing a file as an argument will start basic mode.  Basic mode only allows for the direct control of the jack transport.
 
 
 Loading Files:
 
-Passing a file name as an argument into o2jlive.py will load loop start markers, loop jump events, time changes, and osc message send events, into the program.  Files are ascii text files.  The first line of the file indicates the samplerate of the file.
+Passing a file name as an argument into o2jlive will load loop start markers, loop jump events, time changes, and osc message send events, into the program.  Files are ascii text files.  The first line of the file indicates the samplerate of the file.
     time changes:  Lines beggining with '*', *frame_number tempo time_signature_numerator time_signature_denominator
       One time change must be delared at frame 0 to set initial time signature and tempo
   
@@ -51,7 +51,7 @@ Controlling via OSC:
 
 The configuration file:
 
-Verbosity settings are set to 0 or 1 in order to deactivate or activate descrived verbosity
+Verbosity settings are set to 0 or 1 in order to deactivate or activate described verbosity
 
 Jack Client settings set the tempo and time signature for basic mode.  It also sets the amount of midi imputs and outputs for OSC to MIDI conversion; although, this feature is not yet implimented.
 

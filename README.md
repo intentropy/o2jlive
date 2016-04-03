@@ -2,6 +2,9 @@
 A python based link between the JACK Audio Connection Kit, and Open Sound Control
 
 
+Requirements:  Python >=3.5, Jack-Client, pyliblo
+
+
 Basic Mode:
 
 Running o2jlive without passing a file as an argument will start basic mode.  Basic mode only allows for the direct control of the jack transport.

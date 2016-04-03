@@ -1,0 +1,34 @@
+44100
+
+#This is an example file for o2jlive.py
+
+#time map
+#time event *[frameNum bpm timeSigN timeSigD]
+*0 120 4 4
+
+#loop jump map
+#loop start marker $[frameNum]
+#loop jump point event ![frameNum loopStartPoint]
+$88200
+!264600 0
+$264600
+!441000 1
+
+#OSC map
+#osc message send @[frameNum hostNum]
+#osc message [/path/path mesages mesages mesages...]
+@0 0
+/foo/bar 1
+/this/that 32 14
+@88200 0
+/one/two 1 2
+/three/four three 4.76
+/many/things 1 2 3 4 5 6 7
+@88200 0
+/foo/bar 777
+/foo/biz lalala
+@264600 0
+/dont/seeme nope nope nope
+
+
+~END OF FILE~

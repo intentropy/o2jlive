@@ -17,10 +17,6 @@ O2J Live
 
 import liblo, sys, jack
 
-#CONFIG CONST
-CONFIG_PROPERTY_ARG=0
-CONFIG_VALUE_ARG=1
-
 #TIME CONST
 MINUTE=60
 TIME_BPM_INDEX=0
@@ -79,10 +75,6 @@ eventData=[]
 overrideJumpEvent=False
 newJumpTarget=0
 
-#config
-configFileName='o2jlive.conf'
-configLines=open(configFileName,'r').read().split('\n')
-
 #osc vars
 oscServerId=[]
 oscClientTarget=[]
@@ -100,7 +92,13 @@ bypassLoops=False
 bypassLoopsOnce=False
 preferedLatency=5
 
-#load config file and declare global vars
+#load config file
+#CONFIG CONST
+CONFIG_PROPERTY_ARG=0
+CONFIG_VALUE_ARG=1
+#config
+configFileName='o2jlive.conf'
+configLines=open(configFileName,'r').read().split('\n')
 for lineRead in configLines:
     if (lineRead!="") and (lineRead.strip()[0:1]!='#'):
         #verbosity settings
@@ -230,9 +228,7 @@ if basicMode==False:
     try:
         #load a song file here
         #file load vars
-        loadFile=open(loadFileName,'r')
-        loadFileStr=loadFile.read()
-        loadFileLines=loadFileStr.split('\n')
+        loadFileLines=open(loadFileName,'r').read().split('\n')
         fileLineNum=0
         eventCount=0
         timeEventList=[]

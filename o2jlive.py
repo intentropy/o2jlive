@@ -17,6 +17,10 @@ O2J Live
 
 import liblo, sys, jack
 
+#PROGRAM CONST
+ERROR=255
+CLEAN=0
+
 #TIME CONST
 MINUTE=60
 TIME_BPM_INDEX=0
@@ -189,9 +193,9 @@ try:
     if verboseOscListenPort==True:
         print('Listening for OSC messages on port', end=' ')
         print(oscListenPort)
-except liblo.ServerError as  err:
-    print(str(err))
-    sys.exit(1)
+except liblo.ServerError as  error:
+    print(str(error))
+    sys.exit(ERROR)
 
 #setup to connect to remote OSC servers
 for oscServerNum in range(0,len(oscServerId)):
@@ -207,9 +211,9 @@ for oscServerNum in range(0,len(oscServerId)):
 for oscServerNum in range(0,len(oscServerId)):
     try:
         oscClientTarget.append(liblo.Address(oscServerId[oscServerNum][OSC_CLIENT_IP_INDEX], oscServerId[oscServerNum][OSC_CLIENT_PORT_INDEX]))
-    except liblo.AddressError as err:
-        print(str(err))
-        sys.exit(1)
+    except liblo.AddressError as error:
+        print(str(error))
+        sys.exit(ERROR)
 
 #check if file is being loaded
 if totalArgs==1:
@@ -221,7 +225,7 @@ elif totalArgs==2:
     loadFileName=sys.argv[1]
 else:
     print('Inappropriate number of arguments have been passed.  Exiting...')
-    sys.exit(1)
+    sys.exit(ERROR)
         
 #load file or resort to basic mode
 if basicMode==False:
@@ -252,7 +256,7 @@ if basicMode==False:
                     print('JACK: ', end='')
                     print(jack_client.samplerate)
                     print('Exiting...')
-                    sys.exit(1)
+                    sys.exit(ERROR)
             else:
                 if lineRead!='' and lineRead.strip()[0:1]!='#':
                     if lineRead.strip()[0:1]!='/':
@@ -337,11 +341,11 @@ if basicMode==False:
             timeSigD=int(eventData[initTimeData][EVENT_DATA_INDEX][TIME_SIGD_INDEX])            
         else:
             print('Initial time signature was not set.  Exiting...')
-            sys.exit(1)
+            sys.exit(ERROR)
     except:        
         print(loadFileName, end=' ')
         print('file does not exist or is corrupt.  Exiting...')
-        sys.exit(1)
+        sys.exit(ERROR)
 elif basicMode==True:
     #no file loaded, use basic mode values
     bpm=basicBpm
@@ -364,34 +368,11 @@ def timeChange(bpmChange, timeSigNChange, timeSigDChange):
     
 def sendOSC(target, path, args):
     #send osc messages in this function
-    #verbose outgoing osc messages
-    if verboseOscOut==True:
-            print('Outgoing OSC massage: '+path, end=' ')
-            print(args)
-    #send up to 8 arguments in a message
-    if len(args)==1:
-        liblo.send(oscClientTarget[target], path, args[0])
-    elif len(args)==2:
-        liblo.send(oscClientTarget[target], path, args[0], args[1])
-    elif len(args)==3:
-        liblo.send(oscClientTarget[target], path, args[0], args[1], args[2])
-    elif len(args)==4:
-        liblo.send(oscClientTarget[target], path, args[0], args[1], args[2], args[3])
-    elif len(args)==5:
-        liblo.send(oscClientTarget[target], path, args[0], args[1], args[2], args[3], args[4])
-    elif len(args)==6:
-        liblo.send(oscClientTarget[target], path, args[0], args[1], args[2], args[3], args[4], args[5])
-    elif len(args)==7:
-        liblo.send(oscClientTarget[target], path, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
-    elif len(args)==8:
-        liblo.send(oscClientTarget[target], path, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
-    '''
-    this allows 8 messages at the moment but I need to
-    find a better way!
-    I can't send values as a list but I need to be able to send 
-    more than one value, and the values have to be passed 
-    as individual arguments in liblo.send()
-    '''
+    libloSend='liblo.send(target, path'
+    for eachArg in range(0,len(args)):
+        libloSend+=', args['+str(eachArg)+']'
+    libloSend+=')'
+    exec(libloSend)
     return
     
 def checkOtherEvents():
@@ -668,4 +649,4 @@ while mainLoop!=False:
 #shutdown
 jack_client.transport_stop()
 jack_client.deactivate()
-sys.exit(0)
+sys.exit(CLEAN)
